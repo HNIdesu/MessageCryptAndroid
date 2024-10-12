@@ -12,7 +12,9 @@ import androidx.core.content.getSystemService
 import com.hnidesu.messagecrypt.databinding.ActivityMainBinding
 import java.security.MessageDigest
 import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mPassword:String
@@ -45,7 +47,9 @@ class MainActivity : AppCompatActivity() {
                 else if(TextUtils.isEmpty(password))
                     Toast.makeText(this,"密码不可为空",Toast.LENGTH_SHORT).show()
                 else
-                    binding.textResult.text = cryptText(input,password,decrypt)
+                    binding.textResult.text =
+                        if(decrypt) decryptText(input,password)
+                        else encryptText(input,password)
                 if(password!=mPassword){
                     val pref=getSharedPreferences("settings",Context.MODE_PRIVATE)
                     pref.edit().putString("password",password).apply()
@@ -57,23 +61,23 @@ class MainActivity : AppCompatActivity() {
         }
         binding.inputPassword.setText(mPassword)
     }
-
-    private fun cryptText(input:String, password:String, decrypt:Boolean):String{
-        val rawData= if(decrypt)
-            Base64.decode(input,Base64.DEFAULT)
-        else
-            input.toByteArray()
-        val digest=MessageDigest.getInstance("MD5")
-        val hash= digest.digest(password.toByteArray())
-        val cipher=Cipher.getInstance("AES/ECB/PKCS5Padding")
+    private fun decryptText(input:String, password:String):String{
+        val inputData=Base64.decode(input,Base64.DEFAULT)
+        val hash=MessageDigest.getInstance("MD5").digest(password.toByteArray())
+        val iv=IvParameterSpec(inputData,0,16)
         val key=SecretKeySpec(hash,"AES")
-        cipher.init(
-            if(decrypt) Cipher.DECRYPT_MODE
-            else Cipher.ENCRYPT_MODE
-            ,key)
-        val crypted=cipher.doFinal(rawData)
-        return if(decrypt) crypted.decodeToString()
-        else Base64.encode(crypted,Base64.DEFAULT).decodeToString()
+        val cipher=Cipher.getInstance("AES/CBC/PKCS5Padding")
+        cipher.init(Cipher.DECRYPT_MODE,key,iv)
+        return cipher.doFinal(inputData,16,inputData.size-16).decodeToString()
+    }
+    private fun encryptText(input:String, password:String):String{
+        val hash=MessageDigest.getInstance("MD5").digest(password.toByteArray())
+        val iv=IvParameterSpec(Random.nextBytes(16))
+        val key=SecretKeySpec(hash,"AES")
+        val cipher=Cipher.getInstance("AES/CBC/PKCS5Padding")
+        cipher.init(Cipher.ENCRYPT_MODE,key,iv)
+        val encrypted=cipher.doFinal(input.toByteArray())
+        return Base64.encode(iv.iv+encrypted,Base64.DEFAULT).decodeToString()
     }
 
 }
