@@ -1,10 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- 输入数据的多行EditText -->
+    <EditText
+        android:id="@+id/inputData"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="请输入要加密/解密的数据"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        android:scrollbars="vertical" />
+
+    <!-- 操作选择和密码输入的布局 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical">
+
+        <!-- 操作选择切换按钮 -->
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioEncrypt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="加密"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/radioDecrypt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="解密" />
+        </RadioGroup>
+
+        <!-- 密码输入框 -->
+        <EditText
+            android:id="@+id/inputPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:layout_marginStart="16dp"
+            android:gravity="start"/>
+    </LinearLayout>
+
+    <!-- 执行操作的按钮 -->
+    <Button
+        android:id="@+id/buttonExecute"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="执行"
+        android:layout_marginTop="16dp" />
+
+    <!-- 显示多行结果的TextView -->
+    <TextView
+        android:id="@+id/textResult"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:hint="结果将在这里显示"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:gravity="top"
+        android:scrollbars="vertical"
+        android:padding="8dp"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black" />
+
+    <!-- 复制结果的按钮 -->
+    <Button
+        android:id="@+id/buttonCopy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="复制结果"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
