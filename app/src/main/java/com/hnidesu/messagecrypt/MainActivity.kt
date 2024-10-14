@@ -3,6 +3,7 @@ package com.hnidesu.messagecrypt
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Base64
@@ -21,9 +22,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         mPassword=getSharedPreferences("settings",Context.MODE_PRIVATE).getString("password","keyset")!!
         val binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        if(intent.action==Intent.ACTION_SEND){
+            intent.extras?.getString(Intent.EXTRA_HTML_TEXT)
+            val type=intent.type
+            if(type!=null){
+                val text=intent.getStringExtra(Intent.EXTRA_TEXT)
+                binding.inputData.setText(text)
+            }
+        }
         binding.buttonCopy.setOnClickListener {
             try{
                 val clipboardManager=getSystemService<ClipboardManager>()
