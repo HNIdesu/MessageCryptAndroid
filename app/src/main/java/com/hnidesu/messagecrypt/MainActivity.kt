@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.ScrollingMovementMethod
 import android.util.Base64
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this,"复制失败",Toast.LENGTH_SHORT).show()
             }
         }
+        binding.textResult.movementMethod=ScrollingMovementMethod.getInstance()
         binding.buttonExecute.setOnClickListener {
             try{
                 val input=binding.inputData.text.toString()
