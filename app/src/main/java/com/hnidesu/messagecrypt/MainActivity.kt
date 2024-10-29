@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         val binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         if(intent.action==Intent.ACTION_SEND){
-            intent.extras?.getString(Intent.EXTRA_HTML_TEXT)
             val type=intent.type
             if(type!=null){
                 val text=intent.getStringExtra(Intent.EXTRA_TEXT)
