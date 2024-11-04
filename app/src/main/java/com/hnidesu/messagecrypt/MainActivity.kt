@@ -19,14 +19,23 @@ import javax.crypto.spec.SecretKeySpec
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mPassword:String
+    private var mPassword:String?=null
+    private var mActivityMainBinding:ActivityMainBinding?=null
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if(intent.action==Intent.ACTION_SEND){
+            val type=intent.type
+            if(type!=null){
+                val text=intent.getStringExtra(Intent.EXTRA_TEXT)
+                mActivityMainBinding?.inputData?.setText(text)
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         mPassword=getSharedPreferences("settings",Context.MODE_PRIVATE).getString("password","keyset")!!
         val binding=ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         if(intent.action==Intent.ACTION_SEND){
             val type=intent.type
             if(type!=null){
@@ -34,6 +43,8 @@ class MainActivity : AppCompatActivity() {
                 binding.inputData.setText(text)
             }
         }
+        mActivityMainBinding=binding
+        setContentView(binding.root)
         binding.buttonCopy.setOnClickListener {
             try{
                 val clipboardManager=getSystemService<ClipboardManager>()
