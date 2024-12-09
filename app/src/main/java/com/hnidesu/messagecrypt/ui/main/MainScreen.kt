@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -59,8 +60,7 @@ private fun MainContent(
         OutlinedTextField(
             value = mainScreenViewModel.inputText,
             onValueChange = { text -> mainScreenViewModel.inputText = text },
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 8,
+            modifier = Modifier.fillMaxWidth().height(200.dp),
             placeholder = {
                 Text("请输入要加密的数据")
             })
@@ -96,11 +96,11 @@ private fun MainContent(
         OutlinedTextField(
             value = mainScreenViewModel.outputText,
             onValueChange = {},
-            modifier = Modifier.fillMaxWidth(),
-            minLines = 8,
+            modifier = Modifier.fillMaxWidth().height(200.dp),
             placeholder = {
                 Text("结果将在这里显示")
-            }, readOnly = true
+            },
+            readOnly = true
         )
         Button(
             onClick = {
